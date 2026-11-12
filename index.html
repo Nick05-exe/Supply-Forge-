@@ -32,7 +32,7 @@
   </script>
 
   <!-- Custom Stylesheet with Cache Buster -->
-  <link rel="stylesheet" href="css/styles.css?v=13" />
+  <link rel="stylesheet" href="css/styles.css?v=22" />
 </head>
 <body class="bg-[#F9FAFB] text-slate-900 antialiased min-h-screen">
 
@@ -243,7 +243,7 @@
   <!-- ============================================================ -->
   <!-- APPLICATION SHELL (Visible when Authenticated)               -->
   <!-- ============================================================ -->
-  <div id="app-shell" class="min-h-screen flex flex-1 w-full">
+  <div id="app-shell" class="min-h-screen flex flex-1 w-full hidden">
   <aside id="sidebar" class="w-64 bg-white border-r border-slate-100 flex flex-col justify-between p-4 fixed inset-y-0 left-0 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out lg:static lg:h-screen lg:overflow-y-auto flex-shrink-0">
     <div>
       <!-- Brand Logo & Header -->
@@ -1198,6 +1198,45 @@
               </div>
             </div>
           </div>
+
+          <!-- AI Operations Copilot (Option 3 Hybrid Engine) -->
+          <div class="lg:col-span-2 dashboard-card p-6 space-y-4 text-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                  <span class="text-base">🤖</span> REMI – Resource Management Intelligence (Hybrid Engine)
+                </h3>
+                <p class="text-slate-500 text-[11px] mt-0.5">Dual-brain AI assistant: Instant zero-latency Local Engine + Google Gemini 2.0 Flash GenAI integration.</p>
+              </div>
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                Option 3 Active
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+              <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/50 space-y-1.5">
+                <span class="font-bold text-slate-800 dark:text-slate-200 block">⚡ Mode A: Local Engine</span>
+                <p class="text-slate-500 text-[11px] leading-relaxed">Instant in-browser search, low stock queries, warehouse bay lookup, and 1-click PO generation. 100% offline, zero setup required.</p>
+              </div>
+
+              <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/50 space-y-1.5">
+                <span class="font-bold text-slate-800 dark:text-slate-200 block">✨ Mode B: Gemini GenAI</span>
+                <p class="text-slate-500 text-[11px] leading-relaxed">Conversational reasoning, natural queries, supplier email drafts, and UI function calling using Google AI Studio's 100% free tier.</p>
+              </div>
+
+              <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/50 flex flex-col justify-between">
+                <div>
+                  <span class="font-bold text-slate-800 dark:text-slate-200 block">⚡ Dual Engine Toggle</span>
+                  <p class="text-slate-500 text-[11px] mt-1">Easily toggle between offline in-browser Local Engine (0ms) and Gemini 2.0 Flash AI using the top header switch.</p>
+                </div>
+                <div class="flex items-center gap-2 pt-2">
+                  <button onclick="window.SupplyAI.open();" class="w-full px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold transition-colors text-center">
+                    Open REMI Copilot
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1647,8 +1686,9 @@
   </div> <!-- /#app-shell -->
 
   <!-- Application Logic Scripts with Cache Buster -->
-  <script src="js/data.js?v=13"></script>
-  <script src="js/chart.js?v=13"></script>
-  <script src="js/app.js?v=13"></script>
+  <script src="js/data.js?v=22"></script>
+  <script src="js/chart.js?v=22"></script>
+  <script src="js/app.js?v=22"></script>
+  <script src="js/chatbot.js?v=22"></script>
 </body>
 </html>

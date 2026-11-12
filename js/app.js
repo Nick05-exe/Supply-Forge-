@@ -61,6 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialHash = window.location.hash.replace('#', '') || 'login';
   
   if (data.currentUser) {
+    const loginView = document.getElementById('view-login');
+    const appShell = document.getElementById('app-shell');
+    if (loginView) loginView.classList.add('hidden');
+    if (appShell) appShell.classList.remove('hidden');
+
     navigateTo(initialHash === 'login' ? 'home' : initialHash, false);
     if (initialHash === 'home' || initialHash === 'login') {
       animateCounters();
@@ -71,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('hashchange', () => {
     const hash = window.location.hash.replace('#', '') || 'home';
-    if (!window.supplyForgeData.currentUser && hash !== 'login') {
+    if (!window.supplyForgeData.currentUser) {
       showLoginView();
       return;
     }
@@ -112,12 +117,12 @@ function renderDemoUsers(users) {
       id="demo-btn-${u.id}"
     >
       <div class="flex items-center justify-between">
-        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px] flex items-center justify-center">${u.initials}</span>
-        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tight">${u.id === 'usr-01' ? 'Admin' : u.id === 'usr-02' ? 'QC Lead' : 'Sourcing'}</span>
+        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px] flex items-center justify-center demo-avatar">${u.initials}</span>
+        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tight demo-role-tag">${u.id === 'usr-01' ? 'Admin' : u.id === 'usr-02' ? 'QC Lead' : 'Sourcing'}</span>
       </div>
       <div class="mt-1">
-        <div class="text-xs font-bold text-slate-800 truncate">${u.name}</div>
-        <div class="text-[10px] text-slate-400 truncate">${u.role}</div>
+        <div class="text-xs font-bold text-slate-800 truncate demo-user-name">${u.name}</div>
+        <div class="text-[10px] text-slate-400 truncate demo-user-role">${u.role}</div>
       </div>
     </button>
   `).join('');
@@ -179,6 +184,10 @@ function loginAs(user) {
   if (loginView) loginView.classList.add('hidden');
   if (appShell) appShell.classList.remove('hidden');
 
+  if (window.SupplyAI && window.SupplyAI.updateVisibility) {
+    window.SupplyAI.updateVisibility();
+  }
+
   navigateTo('home');
   showToast(`Welcome back, ${user.name}! (${user.role})`, 'success');
 }
@@ -186,6 +195,10 @@ function loginAs(user) {
 function logout() {
   window.supplyForgeData.currentUser = null;
   sessionStorage.removeItem('supplyforge_auth_user');
+  if (window.SupplyAI) {
+    if (window.SupplyAI.close) window.SupplyAI.close();
+    if (window.SupplyAI.updateVisibility) window.SupplyAI.updateVisibility();
+  }
   showLoginView();
   showToast('Logged out securely.', 'info');
 }
@@ -196,7 +209,16 @@ function showLoginView() {
 
   if (loginView) loginView.classList.remove('hidden');
   if (appShell) appShell.classList.add('hidden');
+  
+  // Close mobile sidebar if open
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar) sidebar.classList.add('-translate-x-full');
+
   window.location.hash = 'login';
+  if (window.SupplyAI) {
+    if (window.SupplyAI.close) window.SupplyAI.close();
+    if (window.SupplyAI.updateVisibility) window.SupplyAI.updateVisibility();
+  }
 }
 
 function switchUser(userId) {
@@ -255,6 +277,21 @@ function togglePasswordVisibility() {
 // 2. SPA ROUTING ENGINE
 // ============================================================
 function navigateTo(viewName, updateHash = true) {
+  // Authentication Guard: Disallow navigation when unauthenticated
+  if (!window.supplyForgeData || !window.supplyForgeData.currentUser) {
+    showLoginView();
+    return;
+  }
+
+  // Ensure login view is hidden and app-shell is visible
+  const loginView = document.getElementById('view-login');
+  const appShell = document.getElementById('app-shell');
+  if (loginView) loginView.classList.add('hidden');
+  if (appShell) appShell.classList.remove('hidden');
+  if (window.SupplyAI && window.SupplyAI.updateVisibility) {
+    window.SupplyAI.updateVisibility();
+  }
+
   const validViews = ['home', 'inventory', 'procurement', 'suppliers', 'purchase-orders', 'goods-receipt', 'stock-movements', 'reports', 'alerts', 'settings', 'warehouse-map', 'audit-trail'];
   
   let targetView = viewName;
